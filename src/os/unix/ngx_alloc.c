@@ -1,16 +1,17 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ 对malloc 和 calloc 这两个函数的封装。
  */
 
 
 #include <ngx_config.h>
 #include <ngx_core.h>
 
-
+//内存的分页大小。
 int ngx_pagesize;
 
-
+//malloc 申请空间，并输出日志。
 void *ngx_alloc(size_t size, ngx_log_t *log)
 {
     void  *p;
@@ -26,7 +27,7 @@ void *ngx_alloc(size_t size, ngx_log_t *log)
     return p;
 }
 
-
+//申请空间，并对申请的空间初始化为0.
 void *ngx_calloc(size_t size, ngx_log_t *log)
 {
     void  *p;
@@ -42,7 +43,7 @@ void *ngx_calloc(size_t size, ngx_log_t *log)
 
 
 #if (HAVE_POSIX_MEMALIGN)
-
+//内存对齐分配内存。
 void *ngx_memalign(size_t alignment, size_t size, ngx_log_t *log)
 {
     void  *p;
@@ -61,6 +62,7 @@ void *ngx_memalign(size_t alignment, size_t size, ngx_log_t *log)
 
 #elif (HAVE_MEMALIGN)
 
+//内存对齐分配内存。
 void *ngx_memalign(size_t alignment, size_t size, ngx_log_t *log)
 {
     void  *p;
