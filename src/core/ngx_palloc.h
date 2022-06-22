@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ 内存池的管理。
  */
 
 
@@ -26,29 +27,35 @@
 
 typedef struct ngx_pool_large_s  ngx_pool_large_t;
 
+//大块内存的内存池。
 struct ngx_pool_large_s {
     ngx_pool_large_t  *next;
     void              *alloc;
 };
 
-
+//内存池。需要的空间小，就在自己的空间中分配，需要的空间大就用打开内存的结构体 large 。
 struct ngx_pool_s {
-    char              *last;
-    char              *end;
-    ngx_pool_t        *next;
-    ngx_pool_large_t  *large;
+    char              *last;//可用的内存的起始位置。
+    char              *end;//当前内存池的最后一个字节的下一个字节的内存地址。大于或等于这个值，说明内存就越界了。
+    ngx_pool_t        *next;//当前内存池同样大小的下一个内存池的地址。
+    ngx_pool_large_t  *large;//大块内存空间的结构体。
     ngx_log_t         *log;
 };
 
-
+//malloc 申请空间，并输出日志。
 void *ngx_alloc(size_t size, ngx_log_t *log);
+//申请空间，并对申请的空间初始化为0.
 void *ngx_calloc(size_t size, ngx_log_t *log);
 
+//创建一个内存池。内存池刚开始的地方就是ngx_pool_t结构体。
 ngx_pool_t *ngx_create_pool(size_t size, ngx_log_t *log);
+//销毁内存池。
 void ngx_destroy_pool(ngx_pool_t *pool);
-
+//内存池中申请一块空间返回回去。
 void *ngx_palloc(ngx_pool_t *pool, size_t size);
+//内存池中申请一块内存，并且把申请的内存初始化为0.
 void *ngx_pcalloc(ngx_pool_t *pool, size_t size);
+//如果p的地址是大块内存申请的，释放掉。否则，忽略。
 ngx_int_t ngx_pfree(ngx_pool_t *pool, void *p);
 
 
