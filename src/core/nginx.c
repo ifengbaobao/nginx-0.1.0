@@ -205,6 +205,7 @@ int main(int argc, char *const *argv)
 #else
 
     if (!ngx_inherited && ccf->daemon) {
+		//创建守护进程。
         if (ngx_daemon(cycle->log) == NGX_ERROR) {
             return 1;
         }

@@ -46,6 +46,7 @@ typedef struct {
 void ngx_debug_init();
 ngx_int_t ngx_os_init(ngx_log_t *log);
 void ngx_os_status(ngx_log_t *log);
+//创建守护进程。
 ngx_int_t ngx_daemon(ngx_log_t *log);
 ngx_int_t ngx_posix_init(ngx_log_t *log);
 void ngx_posix_status(ngx_log_t *log);
